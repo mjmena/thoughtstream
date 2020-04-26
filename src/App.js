@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useMemo } from 'react'
+import { createEditor } from 'slate'
+import { Slate, Editable, withReact } from 'slate-react'
+import { withHistory } from 'slate-history'
 
-function App() {
+const PlainTextExample = () => {
+  const [value, setValue] = useState(initialValue)
+  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <Editable placeholder="Enter some plain text..." />
+    </Slate>
+  )
 }
 
-export default App;
+const initialValue = [
+  {
+    children: [
+      { text: 'This is editable plain text, just like a <textarea>!' },
+    ],
+  },
+]
+
+export default PlainTextExample
